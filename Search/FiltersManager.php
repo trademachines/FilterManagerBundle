@@ -93,6 +93,19 @@ class FiltersManager
     }
 
     /**
+     * @param Request $request
+     * 
+     * @return mixed
+     */
+    public function simpleSearch(Request $request)
+    {
+        $searchRequest = $this->container->buildSearchRequest($request);
+        $search        = $this->container->buildSearch($searchRequest);
+
+        return $this->repository->execute($search);
+    }
+
+    /**
      * Composes url parameters related to given filter.
      *
      * @param SearchRequest   $request Search request.
