@@ -94,7 +94,7 @@ class FiltersManager
 
     /**
      * @param Request $request
-     * 
+     *
      * @return mixed
      */
     public function simpleSearch(Request $request)
@@ -168,5 +168,13 @@ class FiltersManager
         }
 
         return $out;
+    }
+
+    /**
+     * @return FiltersContainer
+     */
+    public function getContainer()
+    {
+        return $this->container;
     }
 }
