@@ -29,13 +29,17 @@ class PagerExtensionsTest extends AbstractElasticsearchTestCase
         $pagerService = new PagerService($counter);
         $pagerService->setLimit(2);
         $pagerService->setPage(2);
-        /** @var \Twig_Environment $environment */
-        $environment = $container->get('twig');
-        $environment->setLoader(new \Twig_Loader_String());
         $paginateTemplate = '{{ ongr_paginate_path(route, pager.getFirstPage, parameters) }}
         {{ ongr_paginate_path(route, pager.getLastPage, parameters) }}';
-        $mainTemplate = "{{ ongr_paginate(pager, 'test_page', [], '" . $paginateTemplate . "') }}";
-        $result = trim($environment->render($mainTemplate, ['pager' => $pagerService]));
+        $mainTemplate = "{{ ongr_paginate(pager, 'test_page', [], 'paginateTemplate') }}";
+        /** @var \Twig_Environment $environment */
+        $environment = $container->get('twig');
+        $environment->setLoader(new \Twig_Loader_Array([
+            'main' => $mainTemplate,
+            'paginateTemplate' => $paginateTemplate
+        ]));
+        $result = trim($environment->render('main', ['pager' => $pagerService]));
+
         $this->assertStringStartsWith('/', $result);
         $this->assertStringEndsWith('/?page=5', $result);
     }
